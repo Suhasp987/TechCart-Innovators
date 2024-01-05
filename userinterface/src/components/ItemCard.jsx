@@ -1,13 +1,33 @@
-import React from 'react';
+import {React,useState} from 'react';
 import { Data } from '../Data/Data';
 import './ItemCard.css'; // Create a CSS file for styling
 import { Button } from '@mui/material';
 
 const ItemCard = () => {
+    const [cartNumber, setCartNumber] = useState('');
+  const [cartItems, setCartItems] = useState([]);
+
+  const handleCartChange = (event) => {
+    const selectedCartNumber = parseInt(event.target.value);
+    setCartNumber(selectedCartNumber);
+
+    
+    const selectedCart = Data.find((cart) => cart.cartNumber === selectedCartNumber);
+
+  
+    setCartItems(selectedCart ? selectedCart.items : []);}
   return (
     <div className="container">
+    <select id="cartNumber" onChange={handleCartChange} value={cartNumber}>
+         <option value="">Select Cart</option>
+        {Data.map((cart) => (
+          <option key={cart.cartNumber} value={cart.cartNumber}>
+            Cart {cart.cartNumber}
+          </option>
+        ))}
+      </select>
       <div className='details'>
-            <Button variant='contained' >Payment</Button>
+            
             <table className='table'>
                <thead>
                   
@@ -16,7 +36,7 @@ const ItemCard = () => {
                   <th>Price</th>
                </thead>
                <tbody className='tbody'>
-                    {Data.map((item,id)=>{
+                    {cartItems.map((item,id)=>{
                         return <tr key={item.id}>
                             <td>{item.name}</td>
                             <td>{item.quantity}</td>
