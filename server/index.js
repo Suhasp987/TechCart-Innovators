@@ -88,13 +88,24 @@ console.log("hello")
     });
   });
 
-app.get('/getItems',(req,res)=>{
-    console.log("get")
-    const {item}=req.body;
-    const items=CartModel.findOne({cartNumber:item})
-    .then(items=>res.json(items))
-    .catch(err=>res.json)
-})
+
+  app.get('/users', async (req, res) => {
+    try {
+      const totalUsers = await CustomerModel.countDocuments({});
+      res.json({ totalUsers });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  
+  app.get('/getItems', (req, res) => {
+    console.log("get");
+    CartModel.find() // Use find instead of findOne
+      .then(items => res.json(items))
+      .catch(err => res.json(err));
+  });
 
 app.post('/Login',(req,res)=>{
    const {email,password}=req.body;
