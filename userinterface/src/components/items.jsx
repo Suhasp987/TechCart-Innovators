@@ -8,9 +8,9 @@ const Items = () => {
     const itemData = 1;
 
     // Make a POST request to the server
-    axios.post('http://localhost:3000/getItems', { item: itemData })
+    axios.get('http://localhost:3000/users')
       .then(response => {
-        console.log('Items retrieved successfully:', response.data.cartNumber);
+        console.log('Items retrieved successfully:', response.totalUsers);
        
          setData(reponse.data);
          
@@ -22,7 +22,7 @@ const Items = () => {
 
   return (
     <div>
-    hello
+  Items
          {Data && Data.map((item)=>{
               return  <div>{item.items} {}</div>
          })}

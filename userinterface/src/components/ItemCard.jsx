@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { Data } from "../Data/Data";
 import "./ItemCard.css";
 import { Button } from "@mui/material";
-
+import Items from "./items";
 const ItemCard = () => {
   const [cartNumber, setCartNumber] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -107,6 +107,7 @@ const ItemCard = () => {
         {cartItems.length>0 &&<Button variant="contained" onclick={paymentHandler}>Payment</Button>}
        
         </div>
+        
       </div>
     </div>
   );

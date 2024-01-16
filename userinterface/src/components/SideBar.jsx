@@ -16,6 +16,9 @@ const SideBar = () => {
          <Typography style={{color:'#f31503'}} variant='h4' fontWeight="bold" mb={2} sx={{color:'black'}}>{selectedCategory}</Typography>
           {selectedCategory==='Cart' && <ItemCard/>}
        </Box>
+
+
+       
     </Stack>
   )
 }
