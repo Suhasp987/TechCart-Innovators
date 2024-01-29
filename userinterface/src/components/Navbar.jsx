@@ -1,20 +1,29 @@
 import React from 'react'
 import {Stack} from '@mui/material'
-import {Link} from 'react-router-dom';
+import {Link,useNavigate} from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import './Navbar.css'
+import {Button} from '@mui/material';
+import {Box} from '@mui/material';
 const Navbar = () => {
+  const navigate=useNavigate();
   const { state } = useLocation();
  
   const { name } = state || {};
+  const Logout=()=>{
+    navigate("/login")
+  }
+  
   return (
-    <Stack direction="row" alignItems="center" p={2} sx={{position:'sticky',background:'white',top:0,justifyContent:'space-between'}} className='w-full border-b-2'>
-    <div>
-     <Link to="/" style={{display:'flex',alignItems:'center'}}>
-            Tech Cart Innovators
-     </Link>
-      {name}
-     </div>
-    </Stack>
+    // 
+   <Box className='item-center justify-between m-11 flex '>
+         
+      <h2 className='font-bold text-3xl'>Tech Cart Innovators</h2>
+      <h2 className='text-xl font-bold'>Welcome <b className='hover:capitalize'>{name}</b>!</h2>
+      <Button variant='contained' className='' onClick={Logout}>Logout</Button>
+   </Box>
+      
+  
   )
 }
 

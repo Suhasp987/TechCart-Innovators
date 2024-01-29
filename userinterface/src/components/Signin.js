@@ -68,7 +68,7 @@ const Signup = () => {
             <div>
               <div className="ml-28"><button type="submit" className="submit">Login</button></div>
               <div className="forgot-password">
-                Don't have an account <span onClick={() => { navigate('/'); }}> Click Here!</span>
+                Don't have an account <span onClick={() => { navigate('/login'); }}> Click Here!</span>
               </div>                          
             </div>
           </div>

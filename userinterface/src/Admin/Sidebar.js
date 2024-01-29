@@ -1,15 +1,26 @@
 import React from 'react'
-
-const Sidebar = () => {
+import {Stack} from '@mui/material'
+import Content from './Content'
+const Sidebar = ({selectedCategory,setSelectedCategory}) => {
+    const items=[
+        {name:"Dashboard"},
+        {name:"Inventory"},
+        {name:"Customers"}
+    ]
   return (
-    <div className=' mr-20'>
-    <div className='border-r-slate-500'>
-      <li className='pb-9 list-none '>
-        <ul className='p-5 border-b cursor-pointer'>Dashboard</ul>
-        <ul  className='p-5 border-b cursor-pointer'>Inventory</ul>
-        <ul  className='p-5 border-b cursor-pointer'>Customers</ul>
-      </li>
-      </div> 
+    <div className="flex md:flex-row flex-col h-full">
+    <Stack  direction="row" sx={{ overflow: 'auto', height: { sx: 'auto', md: '95%' }, flexDirection:{sx:'row',md:'column'} }} >
+      {items && items.map(category => (
+        
+        <button className='category-btn' style={{background:category.name===selectedCategory && '#fc1503',color:'white'}} key={category.name} onClick={()=>setSelectedCategory(category.name)}>
+        
+          <span style={{color:category.name===selectedCategory ? 'black':'red',marginRight:'15px'}}>H</span>
+          <span style={{opacity:category.name===selectedCategory?'1':'0.8',color:category.name===selectedCategory ? 'white':'Black' }}>{category.name}</span>
+        </button>
+      ))}
+      
+    </Stack>
+      { selectedCategory=="Dashboard" && <Content selectedCategory={selectedCategory}/>}
     </div>
   )
 }

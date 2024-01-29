@@ -1,12 +1,13 @@
 import { useState,useEffect } from "react";
 import React from 'react'
 import axios from 'axios'
+import user_icon from '../components/assets/Assets/person.png'
 
-
-const Content = () => {
+const Content = ({selectedCategory}) => {
     const [data,setData]=useState("");
     const [items,setItems]=useState([]);
     const [itemcount,setItemCount]=useState(0);
+   
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -44,7 +45,7 @@ const Content = () => {
         const intervalId = setInterval(() => {
           fetchData();
           fetchItems();
-        }, 2000);
+        }, 1000);
     
         // Clean up the interval when the component is unmounted
         return () => clearInterval(intervalId);
@@ -52,21 +53,35 @@ const Content = () => {
       const allItems = items.reduce((acc, cart) => acc.concat(cart.items), []);
 
   return (
-    <div className=' '>
-    <div className="flex">
-     <h2>Users : </h2>
-    <p> {data}</p></div>
-    <div className="flex">
-    <h2>Orders : </h2>
-    <p>{itemcount}</p></div>
-
+    <div className='ml-12 mt-12'>
+    <div><h2 className="text-xl font-bold">{selectedCategory}</h2></div>
+    <div className="mt-8 flex flex-wrap justify-between w-full">
+         <div className=" m-[18px] flex shadow-xl h-auto  items-center justify-center ">
+              
+              <img src={user_icon} className="m-[18px] "/>
+              <div className="m-[24px]"><h2>Users  </h2>
+              <p className="m-[4px]"> {data}</p></div>
+          </div>
+          <div className=" m-[18px] flex shadow-xl h-auto  items-center justify-center">
+              <img src={user_icon} className="m-[18px]"/>
+              <div className="m-[24px]"><h2>Orders  </h2>
+              <p className="m-[4px]"> {itemcount}</p></div>
+          </div>
+          <div className=" m-[18px] flex shadow-xl h-auto  items-center justify-center">
+              <img src={user_icon} className="m-[18px]"/>
+              <div className="m-[24px]"><h2>Revenue  </h2>
+              <p className="m-[4px]"> {itemcount}</p></div>
+          </div>
+       
+    </div>
   
-    <div className="mt-28">
-    <div className="block"><h2 className="">Orders</h2></div>
-    <table className="table">
-        <thead>
+    <div className="mt-14 ">
+    <div className="block " ><h2 className="text-xl font-bold">Orders</h2></div>
+
+    <table className="table mt-12">
+        <thead style={{color:'white'}}>
           <tr>
-            <th>Name</th>
+            <th>Product</th>
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
@@ -78,7 +93,7 @@ const Content = () => {
               <td>{item.name}</td>
               <td>{item.quantity}</td>
               <td>{item.price}</td>
-              <td>{parseInt(item.quantity)*parseInt(item.price)} </td>
+              <td>{parseInt(item.quantity)*parseInt(item.price)}</td>
             </tr>
           ))}
         </tbody>

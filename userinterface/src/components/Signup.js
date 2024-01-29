@@ -192,7 +192,7 @@ const  Signup=()=>{
          </div>
          <div>
          <button type="submit>" className="submit">Register</button>
-         <div className="forgot-password">Already have an Account ? <span onClick={()=>{navigate('/Login')}}> Click Here!</span></div>
+         <div className="forgot-password">Already have an Account ? <span onClick={()=>{navigate('/signin')}}> Click Here!</span></div>
         
          </div></div>
       </form>
