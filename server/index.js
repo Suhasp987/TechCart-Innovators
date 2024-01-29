@@ -1,10 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
-// require("dotenv").config();
+require("dotenv").config();
 const Razorpay=require("razorpay");
 
-
+const id="rzp_test_L1JPeGnZbS2ffv";
 const PORT = process.env.PORT
 
 // const CustomerModel = require('./models/Customer')
@@ -57,16 +57,16 @@ CartModel.create( [
     {
       cartNumber: 1,
       items: [
-        { name: 'Salt', quantity: '1', price: '$12' },
-        { name: 'Gold Winner', quantity: '1', price: '$50' },
-        { name: 'Atta', quantity: '1', price: '$23' },
+        { name: 'Salt', quantity: '1', price: '12' },
+        { name: 'Gold Winner', quantity: '1', price: '50' },
+        { name: 'Atta', quantity: '1', price: '23' },
       ],
     },
     {
       cartNumber: 2,
       items: [
-        { name: 'Gold Winner', quantity: '1', price: '$50' },
-        { name: 'Gold Winner', quantity: '1', price: '$50' },
+        { name: 'Gold Winner', quantity: '1', price: '50' },
+        { name: 'Gold Winner', quantity: '1', price: '50' },
       ],
     },
   ])
@@ -128,10 +128,10 @@ app.post('/Login',(req,res)=>{
 app.post("/order",async(req,res)=>{
     try{
     const razorpay=new Razorpay({
-         key_id:"123",
-         key_secret:"23",
+         key_id:process.env.key_id,
+         key_secret:process.env.Secret
     });
-    const options=req.body();
+    const options=req.body;
     const order = await razorpay.orders.create(options);
 
     if(!order){
@@ -139,8 +139,8 @@ app.post("/order",async(req,res)=>{
     }
     res.json(order);
     } 
-catch(error){
-    console.log("Error")
+catch(err){
+    console.log(err);
     res.status(500).send("Error");
 }}
 )
@@ -148,5 +148,5 @@ catch(error){
 
 
 app.listen(3000,()=>{
-    console.log("server is running on port ",3000);
+    console.log("server is running on port ",PORT);
 })
