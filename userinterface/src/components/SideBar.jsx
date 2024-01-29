@@ -19,7 +19,8 @@ const SideBar = () => {
        </Box>
        <Box p={2} sx={{overflowY:'auto',height:'90vh',flex:2}}>
          <Typography style={{color:'#f31503'}} variant='h4' fontWeight="bold" mb={2} sx={{color:'black'}}>{selectedCategory}</Typography>
-          {selectedCategory==='Cart' ? <ItemCard/>:selectedCategory==="Account"?<Account/>:<Hero/>}
+          
+
        </Box>
 
 
