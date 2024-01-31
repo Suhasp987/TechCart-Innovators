@@ -5,7 +5,7 @@ import './Signin.css';
 import email_icon from '../components/assets/Assets/email.png';
 import password_icon from '../components/assets/Assets/password.png';
 
-const Signup = () => {
+const Signin = () => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [error, setError] = useState('');
@@ -37,6 +37,7 @@ const Signup = () => {
 
   return (
     <div className="container">
+      
       <div className="header">
         <div className="text">Log In</div>
         <div className="underline"></div>
@@ -69,7 +70,9 @@ const Signup = () => {
               <div className="ml-28"><button type="submit" className="submit">Login</button></div>
               <div className="forgot-password">
                 Don't have an account <span onClick={() => { navigate('/login'); }}> Click Here!</span>
-              </div>                          
+               
+              </div>
+                                     
             </div>
           </div>
         </form>
@@ -78,4 +81,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;

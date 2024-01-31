@@ -9,4 +9,5 @@ export const Categories=[
          {name:"Home",  icon:<HomeIcon/>,},
          {name:"Cart" ,icon:<ShoppingCartIcon/>,},
          {name:'Account',icon:<AccountCircleIcon/>,}
+         
 ]

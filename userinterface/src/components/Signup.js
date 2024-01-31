@@ -104,7 +104,7 @@ const  Signup=()=>{
              setError(result.data.message)
          }
          else{
-          navigate('/login');
+          navigate('/signin');
          }
         {console.log(result)} })
       .catch(err=>console.log(err))

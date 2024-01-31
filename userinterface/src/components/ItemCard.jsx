@@ -1,42 +1,78 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Data } from "../Data/Data";
 import "./ItemCard.css";
 import { Button } from "@mui/material";
 import Items from "./items";
 import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const ItemCard = () => {
   const [cartNumber, setCartNumber] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [total,setTotal]=useState(0);
   const [value,setValue]=useState("");
+  const [cart,setCart]=useState(0);
   const [searchParams,setSearchParams]=useSearchParams()
+  const location = useLocation();
+  const email = location.state && location.state.email;
+   useEffect(()=>{
+       setCartNumber(email)
+   })
+
+  useEffect(()=>{
+    
+    const handleCartChange = () => {
+      const selectedCartNumber = parseInt(email);
+      if (!isNaN(selectedCartNumber)) {
+        setCartNumber(selectedCartNumber);
+      } else {
+        // Handle the case where the entered value is not a number (e.g., clear the input)
+        setCartNumber('');
+      }
+    
   
-  console.log(searchParams)
-  const handleCartChange = (event) => {
-    const selectedCartNumber = parseInt(event.target.value);
-    if (!isNaN(selectedCartNumber)) {
-      setCartNumber(selectedCartNumber);
-    } else {
-      // Handle the case where the entered value is not a number (e.g., clear the input)
-      setCartNumber('');
-    }
+      const selectedCart = Data.find(
+        (cart) => cart.cartNumber === selectedCartNumber
+      );
+  
+      setCartItems(selectedCart ? selectedCart.items : []);
+  
+      const totalPrice = selectedCart
+      ? selectedCart.items.reduce(
+          (acc, item) => acc + parseFloat(item.price.replace("$", "")),
+          0
+        )
+      : 0;
+  
+    setTotal(totalPrice);
+    };
+    handleCartChange();
+  },[cart,cartNumber])
+  
+  // const handleCartChange = (event) => {
+  //   const selectedCartNumber = parseInt(event.target.value);``
+  //   if (!isNaN(selectedCartNumber)) {
+  //     setCartNumber(selectedCartNumber);
+  //   } else {
+  //     // Handle the case where the entered value is not a number (e.g., clear the input)
+  //     setCartNumber('');
+  //   }
   
 
-    const selectedCart = Data.find(
-      (cart) => cart.cartNumber === selectedCartNumber
-    );
+  //   const selectedCart = Data.find(
+  //     (cart) => cart.cartNumber === selectedCartNumber
+  //   );
 
-    setCartItems(selectedCart ? selectedCart.items : []);
+  //   setCartItems(selectedCart ? selectedCart.items : []);
 
-    const totalPrice = selectedCart
-    ? selectedCart.items.reduce(
-        (acc, item) => acc + parseFloat(item.price.replace("$", "")),
-        0
-      )
-    : 0;
+  //   const totalPrice = selectedCart
+  //   ? selectedCart.items.reduce(
+  //       (acc, item) => acc + parseFloat(item.price.replace("$", "")),
+  //       0
+  //     )
+  //   : 0;
 
-  setTotal(totalPrice);
-  };
+  // setTotal(totalPrice);
+  // };
 
   const amount=500;
   const currency="INR";
@@ -113,7 +149,7 @@ const ItemCard = () => {
     type="text"
     placeholder="Enter Cart Number"
     value={cartNumber}
-    onChange={handleCartChange}
+    onChange={(e)=>setCart(e.target.value)}
     onKeyDown={handleEnterKey}
     className=" border border-zinc-950 rounded-lg focus:border-blue-500 focus:outline-none pl-3"
   />

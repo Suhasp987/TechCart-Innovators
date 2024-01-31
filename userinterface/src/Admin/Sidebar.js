@@ -1,11 +1,13 @@
 import React from 'react'
 import {Stack} from '@mui/material'
 import Content from './Content'
+import History from './History'
 const Sidebar = ({selectedCategory,setSelectedCategory}) => {
     const items=[
         {name:"Dashboard"},
         {name:"Inventory"},
-        {name:"Customers"}
+        {name:"Customers"},
+        {name:'History'}
     ]
   return (
     <div className="flex md:flex-row flex-col h-full">
@@ -20,7 +22,7 @@ const Sidebar = ({selectedCategory,setSelectedCategory}) => {
       ))}
       
     </Stack>
-      { selectedCategory=="Dashboard" && <Content selectedCategory={selectedCategory}/>}
+      { selectedCategory=="Dashboard" ? <Content selectedCategory={selectedCategory}/>:<History/>}
     </div>
   )
 }
