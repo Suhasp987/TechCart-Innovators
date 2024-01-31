@@ -11,6 +11,8 @@ const PORT = process.env.PORT
 const CustomerModel  = require('./models/Customer.jsx')
 const CartModel= require('./models/Items.jsx');
 const CartItems=require('./models/CartItems.jsx')
+const History=require('./models/History.jsx');
+const Inventory=require('./models/Inventory.jsx')
 const app=express();
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
@@ -23,7 +25,7 @@ app.post('/Register', (req, res) => {
     const { email,secretkey,type } = req.body;
    console.log("body",req.body)
     CustomerModel.findOne({ email })
-        .then(existingUser => {
+        .then(existingUser=> {
           
           if (existingUser) {
                  
@@ -52,6 +54,103 @@ app.post('/Register', (req, res) => {
         })
         .catch(err => res.json(err));
 });
+
+Inventory.create([
+  {
+    Id:'12345',
+    Product:'Salt',
+    Price:'13',
+
+  },
+  {
+    Id:'21345',
+    Product:'Gold Winner',
+    Price:'135',
+    
+  },
+  {
+    Id:'15432',
+    Product:'Sugar',
+    Price:'50',
+    
+  },
+  {
+    Id:'54213',
+    Product:'',
+    Price:'23',
+    
+  },
+  {
+    Id:'12345',
+    Product:'Salt',
+    Price:'23',
+    
+  }
+])
+
+
+History.create([
+  {
+    Date:'1/28/2024',
+    Cartno:'1',
+    Name:'John',
+    Phone:'987640245',
+    Email:'abc@gmail.com',
+    OrderId:'100',
+    Amount:'5000',
+  },
+  {
+    Date:'29/1/2024',
+    Cartno:'2',
+    Name:'Jack',
+    Phone:'987640245',
+    Email:'cde@gmail.com',
+    OrderId:'101',
+    Amount:'6000',
+  },
+  {
+    Date:'22/2/2024',
+    Cartno:'3',
+    Name:'Joe',
+    Phone:'987640245',
+    Email:'def@gmail.com',
+    OrderId:'102',
+    Amount:'7000',
+  },
+  {
+    Date:'24/5/2024',
+    Cartno:'4',
+    Name:'alex',
+    Phone:'987640245',
+    Email:'gtr@gmail.com',
+    OrderId:'105',
+    Amount:'9000',
+  }
+])
+
+app.post('/filterHistory', async (req, res) => {
+  try {
+    const { date,cartNo, name, email, orderId, phoneNumber } = req.body;
+
+    // Build the filter object based on the provided parameters
+    const filter = {};
+    if (date) filter.Date = date;
+    if (cartNo) filter.Cartno=cartNo;
+    if (name) filter.Name = name;
+    if (email) filter.Email = email;
+    if (orderId) filter.OrderId = orderId;
+    if (phoneNumber) filter.Phone = phoneNumber;
+
+    // Query the History collection with the filter object
+    const filteredData = await History.find(filter);
+
+    res.json(filteredData);
+  } catch (e) {
+    console.error(error);
+    res.status(500).send(e);
+  }
+});
+
 
 CartModel.create( [
     {
@@ -88,7 +187,13 @@ console.log("hello")
     });
   });
 
-
+app.get('/history',async(req,res)=>{
+  
+    const history=await History.find()
+    .then(items=>res.json(items))
+    .catch(err=>res.json(err));
+  
+})
   app.get('/users', async (req, res) => {
     try {
       const totalUsers = await CustomerModel.countDocuments({});
