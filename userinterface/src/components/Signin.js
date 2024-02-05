@@ -24,7 +24,7 @@ const Signin = () => {
         setName(result.data.name);
         
         if (result.data.type === "user") {
-          navigate('/Home', { state: { name: result.data.name } });
+          navigate('/Home', { state: { name: result.data.name,email:result.data.email,password:result.data.password } });
         } else if (result.data.type === "admin") {
           console.log(result.data.name);
           navigate('/Admin', { state: { name: result.data.name } });

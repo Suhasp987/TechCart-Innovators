@@ -122,7 +122,7 @@ const History = () => {
     <div style={{ marginLeft: '5rem' }}>
       <div className="mt-14 ">
         <div className="block ">
-          <h2 className="text-3xl font-bold">Orders</h2>
+          <h2 className="text-3xl font-bold">History</h2>
         </div>
 
         <table className="table mt-12" style={{ width: '100%' }}>

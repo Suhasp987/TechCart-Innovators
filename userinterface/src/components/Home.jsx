@@ -18,6 +18,14 @@ const Home = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const navigate = useNavigate();
 
+
+  const { state } = useLocation();
+  const userName = state?.name 
+  const userEmail=state?.email
+  const userPhone=state?.phone
+  const userpassword=state?.password
+
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -30,16 +38,13 @@ const Home = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    const email = formJson.email;
+    console.log("form",formJson)
+    const cart_no = formJson.cart_no;
     
     handleClose();
     // Navigate to '/Cart' with props as email
-    navigate(`/Cart`, { state: { email } });
+    navigate(`/Cart`,  { state: { ...state, cart_no } });
   };
-
-  // Use useLocation to get access to location.state
-  const location = useLocation();
-  const userData = location.state && location.state.userData;
 
   return (
     <div>
@@ -61,7 +66,7 @@ const Home = () => {
             required
             margin="dense"
             id="name"
-            name="email"
+            name="cart_no"
             label="Enter Cart number"
             type="text"
             fullWidth
@@ -73,8 +78,8 @@ const Home = () => {
           <Button type="submit">OK</Button>
         </DialogActions>
       </Dialog>
-      <Navbar userData={userData} />
-      <SideBar />
+      <Navbar  name={userName}/>
+      <SideBar state={state}/>
     </div>
   );
 };

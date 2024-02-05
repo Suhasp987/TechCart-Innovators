@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Hero.css';
-import cart_icon from '../components/assets/Assets/Images/cart1.jpeg'
-import fruits_icon from '../components/assets/Assets/Images/fruits.jpeg'
-import store_icon from '../components/assets/Assets/Images/store.jpeg'
+import cart_icon from '../components/assets/Assets/Images/cart1.jpeg';
+import fruits_icon from '../components/assets/Assets/Images/fruits.jpeg';
+import store_icon from '../components/assets/Assets/Images/store.jpeg';
 
-import './Hero.css'
 const Hero = () => {
   const images = [
-    {icon:cart_icon},
-    {icon:fruits_icon},
-    {icon:store_icon},
-    // '../components/assets/Assets/Images/cart.jpg',
-    // '../components/assets/Assets/Images/store.jpg',
-    // '../components/assets/Assets/Images/fruits.jpg',
-    
+    { icon: cart_icon },
+    { icon: fruits_icon },
+    { icon: store_icon },
     // Add more image URLs as needed
   ];
 
@@ -22,10 +17,14 @@ const Hero = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change slide every 3 seconds (adjust as needed)
+    }, 3000);
 
     return () => clearInterval(intervalId);
   }, [images.length]);
+
+  const handleCircleClick = (index) => {
+    setCurrentIndex(index);
+  };
 
   return (
     <div className="hero-container">
@@ -36,9 +35,17 @@ const Hero = () => {
             className={`hero-slide ${index === currentIndex ? 'active' : ''}`}
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            <img src={image.icon} alt={`Slide ${index + 1}`} className='imagee' />
-            
+            <img src={image.icon} alt={`Slide ${index + 1}`} className="imagee"  style={{ width: '70rem',height:'28rem', objectFit: 'cover' }}/>
           </div>
+        ))}
+      </div>
+      <div className="circle-container">
+        {images.map((_, index) => (
+          <div
+            key={index}
+            className={`circle ${index === currentIndex ? 'active-circle' : ''}`}
+            onClick={() => handleCircleClick(index)}
+          />
         ))}
       </div>
     </div>

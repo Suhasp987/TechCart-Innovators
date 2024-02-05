@@ -1,31 +1,44 @@
+/* Hero.css */
 .hero-container {
-    overflow: hidden;
-    width: 100%;
-    height: 100vh;
-  }
+  position: relative;
+  margin-top: 30px;
+ 
+}
 
-  .hero-slider {
-    display: flex;
-    height: 100%;
-  }
+.hero-slider {
+  display: flex;
   
-  .hero-slide {
-    flex: 0 0 100%;
-    transition: transform 0.5s ease-in-out;
-    opacity: 0;
-    visibility: hidden;
-  }
+  overflow: hidden;
+}
+
+.hero-slide {
+  flex: 0 0 100%;
+  display: flex;
   
-  .hero-slide.active {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  
-  .imagee {
-    width: 70%;
-    height: 70%;
-    display:block;
-    margin:auto;
-    
-  }
+  justify-content: center;
+
+}
+
+.circle-container {
+  position: absolute;
+  top:'60px';
+  left: 50%;
+  /* transform: translateX(-50%); */
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: lightgray;
+  margin-top: 25px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.active-circle {
+  background-color: blue;
+}

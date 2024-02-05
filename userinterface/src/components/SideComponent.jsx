@@ -5,7 +5,7 @@ import { Stack } from '@mui/material';
 import { Categories } from './utils/constant';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-const SideComponent = ({ selectedCategory, setSelectedCategory }) => {
+const SideComponent = ({ selectedCategory, setSelectedCategory,state }) => {
   const [name, setName] = useState('');
   const navigate=useNavigate()
   const [searchParam, setSearchParam] = useSearchParams();
@@ -16,12 +16,10 @@ const SideComponent = ({ selectedCategory, setSelectedCategory }) => {
   
     // Get the current URL parameters
     const currentParams = Object.fromEntries(searchParam.entries());
-    
-    // Remove all existing parameters
-    navigate(`/${categoryName}` );
+    console.log("params",currentParams);
+   
+    navigate(`/${categoryName}` ,{state:state});
   
-    // Set the new parameter
-    
   };
 
   return (

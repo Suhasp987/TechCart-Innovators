@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from "react";
-import { Data } from "../Data/Data";
+
 import "./ItemCard.css";
 import { Button } from "@mui/material";
 import Items from "./items";
 import { useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import {Snackbar} from "@mui/material";
 const ItemCard = () => {
   const [cartNumber, setCartNumber] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -13,72 +14,142 @@ const ItemCard = () => {
   const [cart,setCart]=useState(0);
   const [searchParams,setSearchParams]=useSearchParams()
   const location = useLocation();
-  const email = location.state && location.state.email;
-   useEffect(()=>{
-       setCartNumber(email)
-   })
-
+  const [deleteInitiated, setDeleteInitiated] = useState(false);
+  const currentDate = new Date();
+const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+  const [result,setResult]=useState({});
+  const [show,setShow]=useState(false);
+  const state= location.state  ;
+  const userName = state?.name;
+  const userEmail = state?.email;
+  const userPhone = state?.phone;
+  const userpassword = state?.password;
+  const [userData, setUserData] = useState({
+    name: userName,
+    email: userEmail,
+    phone: userPhone,
+    password: userpassword,
+  });
+  const cart_no = location.state &&  location.state.cart_no;
+  console.log(cart_no)
   useEffect(()=>{
-    
-    const handleCartChange = () => {
-      const selectedCartNumber = parseInt(email);
-      if (!isNaN(selectedCartNumber)) {
-        setCartNumber(selectedCartNumber);
-      } else {
-        // Handle the case where the entered value is not a number (e.g., clear the input)
-        setCartNumber('');
+        setCartNumber(cart_no)
+  })
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShow(false);
+  };
+  useEffect(() => {
+    if (result.msg) {
+     
+      // Ensure deleteCart is called only once
+      if (!deleteInitiated) {
+        setDeleteInitiated(true);
+        const historyData = {
+          Date: formattedDate,
+          Cartno: cartNumber,
+          Name: userName,
+          Phone: userPhone,
+          Email: userEmail,
+          OrderId: result.orderId,
+          Amount: "5000",
+        };
+  
+        fetch("http://localhost:3000/histories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(historyData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("History API Response:", data);
+          })
+          .catch((error) => {
+            console.error("Error calling /histories API:", error);
+          });
+  
+        deleteCart();
       }
+      setCartNumber();
+      
+      setShow(true);
+      
+    }
+  }, [result.msg, deleteInitiated]);
+
+
+  const deleteCart = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/deleteCart/${cartNumber}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        const errorMessage = await response.text();
+        console.error(`Error deleting cart: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
+  useEffect(()=>{
+    if (!cartNumber) {
+      console.log("Cart number is empty. Skipping API call.");
+      return;
+    }
+    const handleCartChange = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/TempItems", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartNumber: cartNumber,
+          }),
+        });
     
+        if (response.ok) {
+          console.log(response)
+          const datas = await response.json();
+          console.log("datas",datas)
+          const data=datas.items
+          setCartItems(data|| []);
+          console.log("items",cartItems)
+        } else {
+          
+            setCartItems([]);
+          
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+      }
   
-      const selectedCart = Data.find(
-        (cart) => cart.cartNumber === selectedCartNumber
-      );
-  
-      setCartItems(selectedCart ? selectedCart.items : []);
-  
-      const totalPrice = selectedCart
-      ? selectedCart.items.reduce(
-          (acc, item) => acc + parseFloat(item.price.replace("$", "")),
-          0
-        )
-      : 0;
+      const totalPrice = 23
   
     setTotal(totalPrice);
     };
     handleCartChange();
   },[cart,cartNumber])
   
-  // const handleCartChange = (event) => {
-  //   const selectedCartNumber = parseInt(event.target.value);``
-  //   if (!isNaN(selectedCartNumber)) {
-  //     setCartNumber(selectedCartNumber);
-  //   } else {
-  //     // Handle the case where the entered value is not a number (e.g., clear the input)
-  //     setCartNumber('');
-  //   }
   
-
-  //   const selectedCart = Data.find(
-  //     (cart) => cart.cartNumber === selectedCartNumber
-  //   );
-
-  //   setCartItems(selectedCart ? selectedCart.items : []);
-
-  //   const totalPrice = selectedCart
-  //   ? selectedCart.items.reduce(
-  //       (acc, item) => acc + parseFloat(item.price.replace("$", "")),
-  //       0
-  //     )
-  //   : 0;
-
-  // setTotal(totalPrice);
-  // };
 
   const amount=500;
   const currency="INR";
   const receiptId="qryaq1";
 
- const paymentHandler=async(e)=>{
+ const paymentHandler=async (e)=>{
   console.log("payment start")
         const response = await fetch("http://localhost:3000/order",{
              method:"POST",
@@ -95,22 +166,31 @@ const ItemCard = () => {
         console.log(order);
 
         var options = {
-          "key": "rzp_test_L1JPeGnZbS2ffv", // Enter the Key ID generated from the Dashboard
-          amount,// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          "key": "rzp_test_L1JPeGnZbS2ffv", 
+          amount,
           currency,
-          "name": "Tech Cart ", //your business name
+          "name": "Tech Cart ", 
           "description": "Test Transaction",
-          "image": "https://example.com/your_logo",
-          "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-          "handler": function (response){
-              alert(response.razorpay_payment_id);
-              alert(response.razorpay_order_id);
-              alert(response.razorpay_signature)
+          "image": "",
+          "order_id": order.id, 
+          "handler":async function  (response){
+             const body={...response};
+             const validateRes=await fetch("http://localhost:3000/validate",{
+              method:"POST",
+              body:JSON.stringify(body),
+              headers:{
+                "Content-Type":"application/json"
+              },
+             });
+             const jsonRes=await validateRes.json();
+             setResult(jsonRes)
+
+             console.log(jsonRes);
           },
-          "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
-              "name": "Suhas", //your customer's name
+          "prefill": { 
+              "name": "Suhas", 
               "email": "suhas123.p@gmail.com", 
-              "contact": "8792713154"  //Provide the customer's phone number for better conversion rates 
+              "contact": "8792713154"   
           },
           "notes": {
               "address": "Razorpay Corporate Office"
@@ -119,32 +199,32 @@ const ItemCard = () => {
               "color": "#3399cc"
           }
       };
-      var rzp1 = new window.Razorpay(options);
+      var rzp1 = new Razorpay(options);
       rzp1.on('payment.failed', function (response){
-              alert(response.error.code);
-              alert(response.error.description);
-              alert(response.error.source);
-              alert(response.error.step);
-              alert(response.error.reason);
-              alert(response.error.metadata.order_id);
-              alert(response.error.metadata.payment_id);
+              // alert(response.error.code);
+              // alert(response.error.description);
+              // alert(response.error.source);
+              // alert(response.error.step);
+              // alert(response.error.reason);
+              // alert(response.error.metadata.order_id);
+              // alert(response.error.metadata.payment_id);
       });
 
       rzp1.open();
       e.preventDefault();
+
+
  }
+ 
+ 
  const handleEnterKey = (e) => {
   if (e.key === 'Enter') {
-    // Value entered by the user is available in cartNumber
     console.log('Cart Number entered:', cartNumber);
-    // You can perform further actions or call your desired method here
   }
 };
   
   return (
     <div className="">
-     
-
     <input
     type="text"
     placeholder="Enter Cart Number"
@@ -160,27 +240,31 @@ const ItemCard = () => {
           <thead style={{color:'white'}} className="">
           <tr>
             <th>Product</th>
-            <th>Quantity</th>
+            
             <th>Price</th>
             <th>Total</th>
             </tr>
           </thead>
           <tbody className="tbody">
-            {cartItems.map((item, id) => {
+            {cartItems && cartItems.map((item, id) => {
               return (
-                <tr key={item.id}>
-                  <td>{item.name} </td>
-                  <td>{item.quantity}</td>
-                  <td>{item.price}</td>
-                  <td>{parseInt(item.quantity)*parseInt(item.price)}</td>
-                  
-
-                </tr>
+                <tr >
+                {console.log(item)}
+               <td>{item.Product}</td>
+               <td>{item.Price}</td>
+               <td>{item.Price}</td>
+               
+    </tr>
               );
             })}
           </tbody>
         </table>
-        
+        <Snackbar
+        open={show}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={`Pament Sucessfull ${result.msg}`}
+      />
         {cartItems.length>0 && <h3 style={{display:'flex',  justifyContent:'flex-end',marginRight:'18rem'}}  className="m-5 text-lg">Total : {total}</h3>} 
         <div style={{display:'flex',justifyContent:'flex-end',marginRight:'17rem'}}>
         
