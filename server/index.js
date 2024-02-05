@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 require("dotenv").config();
 const Razorpay=require("razorpay");
+const crypto=require("crypto");
+
 
 const id="rzp_test_L1JPeGnZbS2ffv";
 const PORT = process.env.PORT
@@ -13,6 +15,7 @@ const CartModel= require('./models/Items.jsx');
 const CartItems=require('./models/CartItems.jsx')
 const History=require('./models/History.jsx');
 const Inventory=require('./models/Inventory.jsx')
+const TemporaryTable=require('./models/Temporarytable.jsx')
 const app=express();
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
@@ -57,31 +60,31 @@ app.post('/Register', (req, res) => {
 
 Inventory.create([
   {
-    Id:'12345',
+    product_id:'12345',
     Product:'Salt',
     Price:'13',
 
   },
   {
-    Id:'21345',
+    product_id:'21345',
     Product:'Gold Winner',
     Price:'135',
     
   },
   {
-    Id:'15432',
+    product_id:'15432',
     Product:'Sugar',
     Price:'50',
     
   },
   {
-    Id:'54213',
-    Product:'',
-    Price:'23',
+    product_id:'54213',
+    Product:'Surf excel',
+    Price:'400',
     
   },
   {
-    Id:'12345',
+    product_id:'12345',
     Product:'Salt',
     Price:'23',
     
@@ -89,44 +92,119 @@ Inventory.create([
 ])
 
 
-History.create([
-  {
-    Date:'1/28/2024',
-    Cartno:'1',
-    Name:'John',
-    Phone:'987640245',
-    Email:'abc@gmail.com',
-    OrderId:'100',
-    Amount:'5000',
-  },
-  {
-    Date:'29/1/2024',
-    Cartno:'2',
-    Name:'Jack',
-    Phone:'987640245',
-    Email:'cde@gmail.com',
-    OrderId:'101',
-    Amount:'6000',
-  },
-  {
-    Date:'22/2/2024',
-    Cartno:'3',
-    Name:'Joe',
-    Phone:'987640245',
-    Email:'def@gmail.com',
-    OrderId:'102',
-    Amount:'7000',
-  },
-  {
-    Date:'24/5/2024',
-    Cartno:'4',
-    Name:'alex',
-    Phone:'987640245',
-    Email:'gtr@gmail.com',
-    OrderId:'105',
-    Amount:'9000',
+
+
+app.post('/histories', async (req, res) => {
+  try {
+    // Extract data from the request body
+    const { Date, Cartno, Name, Phone, Email, OrderId,Amount } = req.body;
+
+    // Create a new History instance
+    const newHistory = new History({
+      Date,
+      Cartno,
+      Name,
+      Phone,
+      Email,
+      OrderId,
+      Amount,
+    });
+
+    // Save the newHistory instance to the database
+    await newHistory.save();
+
+    res.status(201).json({ message: 'History added successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
-])
+});
+
+app.delete('/deleteCart/:cart_no', async (req, res) => {
+  const cartNumber = req.params.cart_no;
+
+  try {
+    // Check if the cart exists
+    const existingCart = await TemporaryTable.findOne({ cartNumber });
+
+    if (existingCart) {
+      // Cart exists, delete the entry
+      await TemporaryTable.deleteOne({ cartNumber });
+      res.json(`Cart with cartNumber ${cartNumber} deleted successfully`);
+    } else {
+      // Cart doesn't exist
+      res.status(404).json(`Cart with cartNumber ${cartNumber} not found`);
+    }
+  } catch (error) {
+    // Handle any errors
+    console.error(error);
+    res.status(500).json('Internal Server Error');
+  }
+});
+app.get('/items',async (req,res)=>{
+  try{
+         const {product_id} = req.body;
+         console.log(product_id)
+         const id={};
+         if (product_id) id.product_id=product_id;
+         const data=await Inventory.find(id);
+         res.json(data);
+  }
+  catch(error){
+        console.log(error);
+  }
+})
+
+app.post('/addItemsToCart', async (req, res) => {
+  const { cart_no, product_id } = req.body;
+  const id = {};
+  if (product_id) id.product_id = product_id;
+
+  // Check if cartNumber already exists in TemporaryTable
+  const existingCart = await TemporaryTable.findOne({ cartNumber: cart_no });
+
+  if (existingCart) {
+    // Cart exists, add items to the existing cart
+    const data = await Inventory.find(id);
+    
+    // Update the existing entry by adding new items
+    await TemporaryTable.updateOne(
+      { cartNumber: cart_no },
+      { $push: { items: data } }
+    );
+  } else {
+    const data = await Inventory.find(id);
+    await TemporaryTable.create({
+      cartNumber: cart_no,
+      items: data,
+    });
+  }
+
+  res.json("Successfully inserted the Item");
+});
+
+
+app.post('/TempItems', async (req, res) => {
+  try {
+    const { cartNumber } = req.body;
+
+    if (!cartNumber) {
+      return res.status(400).json('Cart number is required');
+    }
+
+    const temporaryTableData = await TemporaryTable.findOne({ cartNumber:cartNumber });
+     console.log("table",temporaryTableData)
+    if (temporaryTableData===null) {
+      return res.status(404).json("null");
+      
+    }
+
+    res.json(temporaryTableData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json('Internal Server Error');
+  }
+});
 
 app.post('/filterHistory', async (req, res) => {
   try {
@@ -152,23 +230,7 @@ app.post('/filterHistory', async (req, res) => {
 });
 
 
-CartModel.create( [
-    {
-      cartNumber: 1,
-      items: [
-        { name: 'Salt', quantity: '1', price: '12' },
-        { name: 'Gold Winner', quantity: '1', price: '50' },
-        { name: 'Atta', quantity: '1', price: '23' },
-      ],
-    },
-    {
-      cartNumber: 2,
-      items: [
-        { name: 'Gold Winner', quantity: '1', price: '50' },
-        { name: 'Gold Winner', quantity: '1', price: '50' },
-      ],
-    },
-  ])
+
 console.log("hello")
   app.post('/sendData', (req, res) => {
     console.log("hello")
@@ -252,6 +314,30 @@ catch(err){
 
 
 
+
+app.post("/validate",async(req,res)=>{
+  console.log("validate started")
+  const  {razorpay_order_id,razorpay_payment_id,razorpay_signature}=req.body;
+  const sha = crypto.createHmac("sha256",process.env.Secret);
+  console.log("sha",sha)
+  sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+  const digest=sha.digest("hex");
+  if(digest!==razorpay_signature){
+    return res.status(400).json({msg:"Transaction is not legit!"})
+
+  }
+  res.json({
+    msg:"success",
+    orderId:razorpay_order_id,
+    paymentId:razorpay_payment_id,
+  
+  })
+})
+
+
+
+
+
 app.listen(3000,()=>{
-    console.log("server is running on port ",PORT);
+    console.log("server is running on port ",3000);
 })
