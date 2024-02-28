@@ -3,7 +3,7 @@ import { React, useEffect, useState } from "react";
 import "./ItemCard.css";
 import { Button } from "@mui/material";
 import Items from "./items";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams,Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import {Snackbar} from "@mui/material";
 const ItemCard = () => {
@@ -58,7 +58,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
           Amount: "5000",
         };
   
-        fetch("http://localhost:3000/histories", {
+        fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/histories", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -72,6 +72,32 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
           .catch((error) => {
             console.error("Error calling /histories API:", error);
           });
+          const TransactionData = {
+            Date: formattedDate,
+            Cartno: cartNumber,
+            Name: userName,
+            Phone: userPhone,
+            Email: userEmail,
+            OrderId: result.orderId,
+            TransactionId:result.paymentId,
+            Products:cartItems,
+            Amount: "5000",
+          };
+    
+          fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Transactions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(TransactionData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("History API Response:", data);
+            })
+            .catch((error) => {
+              console.error("Error calling /transactions API:", error);
+            });
   
         deleteCart();
       }
@@ -85,7 +111,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
 
   const deleteCart = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/deleteCart/${cartNumber}`, {
+      const response = await fetch(`https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/deleteCart/${cartNumber}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +136,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
     }
     const handleCartChange = async () => {
       try {
-        const response = await fetch("http://localhost:3000/TempItems", {
+        const response = await fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/TempItems", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -151,7 +177,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
 
  const paymentHandler=async (e)=>{
   console.log("payment start")
-        const response = await fetch("http://localhost:3000/order",{
+        const response = await fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/order",{
              method:"POST",
              body:JSON.stringify({
               amount,
@@ -175,7 +201,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
           "order_id": order.id, 
           "handler":async function  (response){
              const body={...response};
-             const validateRes=await fetch("http://localhost:3000/validate",{
+             const validateRes=await fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/validate",{
               method:"POST",
               body:JSON.stringify(body),
               headers:{

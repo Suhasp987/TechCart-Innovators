@@ -3,7 +3,7 @@ import axios from 'axios';
 import { IoFilter } from 'react-icons/io5';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { Link } from 'react-router-dom';
 
 
 // ... (import statements)
@@ -31,7 +31,7 @@ const History = () => {
   useEffect(() => {
     const filterHistory = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/filterHistory', inputValues);
+        const response = await axios.post(' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/filterHistory', inputValues);
         console.log(response.data)
         setFilteredData(response.data);
       } catch (error) {
@@ -45,7 +45,7 @@ const History = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/history');
+        const response = await axios.get('https://140a-2401-4900-4e73-d1cb-c8b9-d1fc-c06a-fa3f.ngrok-free.app/history');
         console.log('Items retrieved successfully:', response.data);
         setData(response.data);
         setFilteredData(response.data);
@@ -189,17 +189,23 @@ const History = () => {
             </tr>
           </thead>
           <tbody className="tbody">
-            {filteredData.map((item) => (
+          {Array.isArray(filteredData) && filteredData.length > 0 ? (
+            filteredData.map((item) => (
               <tr key={item._id}>
                 <td>{item.Date}</td>
                 <td>{item.Cartno}</td>
                 <td>{item.Name}</td>
                 <td>{item.Phone}</td>
                 <td>{item.Email}</td>
-                <td>{item.OrderId}</td>
+                <td><Link to={`/details/${item.OrderId}`}>{item.OrderId}</Link></td>
                 <td>{item.Amount}</td>
               </tr>
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No data available</td>
+            </tr>
+          )}
           </tbody>
         </table>
       </div>

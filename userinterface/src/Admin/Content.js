@@ -11,7 +11,7 @@ const Content = ({selectedCategory}) => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/users');
+            const response = await axios.get('https://b63f-2401-4900-65b8-9289-c821-912d-4377-dbb3.ngrok-free.app/users');
             console.log('Items retrieved successfully:', response.data.totalUsers);
             setData(response.data.totalUsers);
           } catch (error) {
@@ -55,8 +55,8 @@ const Content = ({selectedCategory}) => {
   return (
     <div className='ml-12 mt-12'>
     <div><h2 className="text-xl font-bold">{selectedCategory}</h2></div>
-    <div className="mt-8 flex flex-wrap justify-between w-full">
-         <div className=" m-[18px] flex shadow-xl h-auto  items-center justify-center ">
+    <div className="mt-8 flex flex-wrap  w-full">
+         <div className=" m-[18px] flex shadow-xl h-auto  items-center  ">
               
               <img src={user_icon} className="m-[18px] "/>
               <div className="m-[24px]"><h2>Users  </h2>

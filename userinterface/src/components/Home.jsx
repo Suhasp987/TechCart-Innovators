@@ -20,10 +20,8 @@ const Home = () => {
 
 
   const { state } = useLocation();
-  const userName = state?.name 
-  const userEmail=state?.email
-  const userPhone=state?.phone
-  const userpassword=state?.password
+  const userName = state.name||" " 
+  
 
 
   const handleClickOpen = () => {

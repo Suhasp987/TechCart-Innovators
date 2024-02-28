@@ -96,7 +96,7 @@ const  Signup=()=>{
       e.preventDefault();
       console.log('start');
 
-      axios.post('http://localhost:3000/Register',{name,email,password,secretkey,type})
+      axios.post(' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Register',{name,email,password,secretkey,type})
       .then(result=>{
 
         if(result.data.message==="Invalid secret key" || result.data.message==="Record already exists for this email" ){
@@ -104,7 +104,7 @@ const  Signup=()=>{
              setError(result.data.message)
          }
          else{
-          navigate('/signin');
+          navigate('/');
          }
         {console.log(result)} })
       .catch(err=>console.log(err))
@@ -192,7 +192,7 @@ const  Signup=()=>{
          </div>
          <div>
          <button type="submit>" className="submit">Register</button>
-         <div className="forgot-password">Already have an Account ? <span onClick={()=>{navigate('/signin')}}> Click Here!</span></div>
+         <div className="forgot-password">Already have an Account ? <span onClick={()=>{navigate('/')}}> Click Here!</span></div>
         
          </div></div>
       </form>

@@ -39,7 +39,8 @@ const Sidebar = ({selectedCategory,setSelectedCategory}) => {
       ))}
       
     </Stack>
-      { params.text==="Dashboard" ? <Content selectedCategory={params.text}/>:params.text==="Customers"?<Customer/>:params.text==="Inventory"?<Inventory/>:<History/>}
+
+         <div style={{width:'80%',marginRight:'22px'}}> { params.text==="Dashboard" ? <Content selectedCategory={params.text}/>:params.text==="Customers"?<Customer/>:params.text==="Inventory"?<Inventory/>:<History/>}</div>
     </div>
   )
 }
