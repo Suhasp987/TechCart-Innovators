@@ -359,8 +359,8 @@ app.post('/Login',(req,res)=>{
 app.post("/order",async(req,res)=>{
     try{
     const razorpay=new Razorpay({
-         key_id:process.env.key_id,
-         key_secret:process.env.Secret
+         key_id:"rzp_test_L1JPeGnZbS2ffv",
+         key_secret:"kM3HWuzLYF6xiljfsJmi0mir",
     });
     const options=req.body;
     const order = await razorpay.orders.create(options);

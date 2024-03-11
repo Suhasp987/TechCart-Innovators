@@ -96,7 +96,7 @@ const  Signup=()=>{
       e.preventDefault();
       console.log('start');
 
-      axios.post(' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Register',{name,email,password,secretkey,type})
+      axios.post(' https://tech-cart-vert.vercel.app/Register',{name,email,password,secretkey,type})
       .then(result=>{
 
         if(result.data.message==="Invalid secret key" || result.data.message==="Record already exists for this email" ){

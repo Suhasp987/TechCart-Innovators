@@ -10,7 +10,7 @@ const Details = () => {
     const fetchData = async () => {
       try {
         // Fetch data from the Transaction API using orderId in the request body
-        const response = await fetch(' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/OrderId', {
+        const response = await fetch('https://tech-cart-vert.vercel.app/OrderId', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -66,6 +66,8 @@ const Details = () => {
            <th>Product Id</th>
            <th>Product</th>
            <th>Price</th>
+           <th>Quantity</th>
+           <th>Total</th>
         </thead>
         <tbody className='tbody'>
           {transactionData.map((transaction)=>(
@@ -75,6 +77,8 @@ const Details = () => {
                 <td>{product.product_id}</td>
                 <td>{product.Product}</td>
                 <td>{product.Price}</td>
+                <td>{product.Quantity}</td>
+                <td>{product.Price*product.Quantity}</td>
                 </tr>
               ))
            

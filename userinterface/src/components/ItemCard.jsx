@@ -16,7 +16,8 @@ const ItemCard = () => {
   const location = useLocation();
   const [deleteInitiated, setDeleteInitiated] = useState(false);
   const currentDate = new Date();
-const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth()+1}-${currentDate.getDate()}`;
+console.log(formattedDate);
   const [result,setResult]=useState({});
   const [show,setShow]=useState(false);
   const state= location.state  ;
@@ -32,7 +33,16 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
   });
   const cart_no = location.state &&  location.state.cart_no;
   console.log(cart_no)
+  const calculateTotal = () => {
+    let totalAmount = 0;
+    for (const item of cartItems) {
+      totalAmount += parseFloat(item.Price*item.Quantity) || 0;
+    }
+    return totalAmount;
+  };
   useEffect(()=>{
+    const newTotal = calculateTotal();
+    setTotal(newTotal);
         setCartNumber(cart_no)
   })
 
@@ -49,7 +59,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
       if (!deleteInitiated) {
         setDeleteInitiated(true);
         const historyData = {
-          Date: formattedDate,
+          date: formattedDate,
           Cartno: cartNumber,
           Name: userName,
           Phone: userPhone,
@@ -58,7 +68,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
           Amount: "5000",
         };
   
-        fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/histories", {
+        fetch("http://localhost:5000/histories", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -73,7 +83,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
             console.error("Error calling /histories API:", error);
           });
           const TransactionData = {
-            Date: formattedDate,
+            date: formattedDate,
             Cartno: cartNumber,
             Name: userName,
             Phone: userPhone,
@@ -84,7 +94,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
             Amount: "5000",
           };
     
-          fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Transactions", {
+          fetch("http://localhost:5000/Transactions", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -111,7 +121,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
 
   const deleteCart = async () => {
     try {
-      const response = await fetch(`https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/deleteCart/${cartNumber}`, {
+      const response = await fetch(`https://tech-cart-vert.vercel.app/deleteCart/${cartNumber}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -121,6 +131,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        window.location.reload;
       } else {
         const errorMessage = await response.text();
         console.error(`Error deleting cart: ${errorMessage}`);
@@ -129,14 +140,15 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
       console.error("Network error:", error);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     if (!cartNumber) {
       console.log("Cart number is empty. Skipping API call.");
       return;
     }
-    const handleCartChange = async () => {
+  
+    const fetchData = async () => {
       try {
-        const response = await fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/TempItems", {
+        const response = await fetch("https://tech-cart-vert.vercel.app/TempItems", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -145,39 +157,39 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
             cartNumber: cartNumber,
           }),
         });
-    
+  
         if (response.ok) {
-          console.log(response)
           const datas = await response.json();
-          console.log("datas",datas)
-          const data=datas.items
-          setCartItems(data|| []);
-          console.log("items",cartItems)
+          const data = datas.items;
+          setCartItems(data || []);
+          console.log("Items:", cartItems);
         } else {
-          
-            setCartItems([]);
-          
+          setCartItems([]);
         }
       } catch (error) {
         console.error("Network error:", error);
       }
-  
-      const totalPrice = 23
-  
-    setTotal(totalPrice);
     };
-    handleCartChange();
-  },[cart,cartNumber])
+  
+    // Call fetchData initially
+    fetchData();
+  
+    // Set up an interval to call fetchData every two seconds
+    const intervalId = setInterval(fetchData, 1000);
+  
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [cart, cartNumber]);
   
   
 
-  const amount=500;
+  const amount=total;
   const currency="INR";
   const receiptId="qryaq1";
 
  const paymentHandler=async (e)=>{
   console.log("payment start")
-        const response = await fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/order",{
+        const response = await fetch("http://localhost:5000/order",{
              method:"POST",
              body:JSON.stringify({
               amount,
@@ -189,8 +201,8 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
              },
         });
         const order=await response.json();
-        console.log(order);
-
+        console.log("order",order);
+        console.log(order.id);
         var options = {
           "key": "rzp_test_L1JPeGnZbS2ffv", 
           amount,
@@ -201,7 +213,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
           "order_id": order.id, 
           "handler":async function  (response){
              const body={...response};
-             const validateRes=await fetch("https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/validate",{
+             const validateRes=await fetch("http://localhost:5000/validate",{
               method:"POST",
               body:JSON.stringify(body),
               headers:{
@@ -268,6 +280,7 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
             <th>Product</th>
             
             <th>Price</th>
+            <th>Quantity</th>
             <th>Total</th>
             </tr>
           </thead>
@@ -278,7 +291,9 @@ const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${
                 {console.log(item)}
                <td>{item.Product}</td>
                <td>{item.Price}</td>
-               <td>{item.Price}</td>
+               
+               <td>{item.Quantity}</td>
+               <td>{item.Price*item.Quantity}</td>
                
     </tr>
               );

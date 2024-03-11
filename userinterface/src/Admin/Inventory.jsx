@@ -12,7 +12,7 @@ const Inventory = () => {
     const fetchData = async () => {
       try {
        
-        const response = await axios.post('https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Inventoryitem');
+        const response = await axios.get('https://tech-cart-vert.vercel.app/Inventoryitem');
         console.log('API Response:', response.data);
         setInventoryItems(response.data);
       } catch (error) {

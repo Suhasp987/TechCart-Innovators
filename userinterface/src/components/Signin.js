@@ -16,7 +16,7 @@ const Signin = () => {
     e.preventDefault();
     console.log('start');
     
-    axios.post(' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Login', { email, password })
+    axios.post('https://tech-cart-vert.vercel.app/Login', { email, password })
       .then(result => {
         console.log(result);
         console.log(result.data.name);
@@ -24,7 +24,7 @@ const Signin = () => {
         setName(result.data.name);
         
         if (result.data.type === "user") {
-          navigate('/Home', { state: { name: result.data.name,email:result.data.email,password:result.data.password } });
+          navigate('/Home', { state: { name: result?.data?.name,email:result?.data?.email,password:result?.data?.password } });
         } else if (result.data.type === "admin") {
           console.log(result.data.name);
           navigate('/Admin', { state: { name: result.data.name } });

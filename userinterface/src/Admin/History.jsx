@@ -31,7 +31,7 @@ const History = () => {
   useEffect(() => {
     const filterHistory = async () => {
       try {
-        const response = await axios.post(' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/filterHistory', inputValues);
+        const response = await axios.post(' http://localhost:5000/filterHistory', inputValues);
         console.log(response.data)
         setFilteredData(response.data);
       } catch (error) {
@@ -45,10 +45,11 @@ const History = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://140a-2401-4900-4e73-d1cb-c8b9-d1fc-c06a-fa3f.ngrok-free.app/history');
+        const response = await axios.get('http://localhost:5000/history');
         console.log('Items retrieved successfully:', response.data);
         setData(response.data);
         setFilteredData(response.data);
+        
       } catch (error) {
         console.error('Error retrieving items:', error);
       }
@@ -192,7 +193,7 @@ const History = () => {
           {Array.isArray(filteredData) && filteredData.length > 0 ? (
             filteredData.map((item) => (
               <tr key={item._id}>
-                <td>{item.Date}</td>
+                <td>{item.date}</td>
                 <td>{item.Cartno}</td>
                 <td>{item.Name}</td>
                 <td>{item.Phone}</td>

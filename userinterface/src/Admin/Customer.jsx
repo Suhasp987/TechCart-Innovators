@@ -5,7 +5,7 @@ const Customer= () => {
   const [Customer, setCustomer] = useState([]);
 
   useEffect(() => {
-    const apiUrl = ' https://a3d2-2401-4900-6300-e02c-3877-4790-5c5e-123f.ngrok-free.app/Customer';
+    const apiUrl = ' https://tech-cart-vert.vercel.app/Customer';
 
     // Fetch data from the API directly inside the useEffect
     (async () => {

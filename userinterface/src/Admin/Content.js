@@ -11,7 +11,7 @@ const Content = ({selectedCategory}) => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('https://b63f-2401-4900-65b8-9289-c821-912d-4377-dbb3.ngrok-free.app/users');
+            const response = await axios.get('https://tech-cart-vert.vercel.app/users');
             console.log('Items retrieved successfully:', response.data.totalUsers);
             setData(response.data.totalUsers);
           } catch (error) {
@@ -21,7 +21,7 @@ const Content = ({selectedCategory}) => {
 
         const fetchItems=async()=>{
             try {
-                const response = await axios.get('http://localhost:3000/getItems');
+                const response = await axios.get('https://tech-cart-vert.vercel.app/getItems');
                 console.log(response.data)
                 setItems(response.data);
         
