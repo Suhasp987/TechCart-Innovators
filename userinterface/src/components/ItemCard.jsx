@@ -6,6 +6,7 @@ import Items from "./items";
 import { useSearchParams,Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import {Snackbar} from "@mui/material";
+
 const ItemCard = () => {
   const [cartNumber, setCartNumber] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -66,6 +67,7 @@ console.log(formattedDate);
           Email: userEmail,
           OrderId: result.orderId,
           Amount: "5000",
+          Payment:result.msg,
         };
   
         fetch("http://localhost:5000/histories", {
@@ -92,9 +94,10 @@ console.log(formattedDate);
             TransactionId:result.paymentId,
             Products:cartItems,
             Amount: "5000",
+            
           };
     
-          fetch("http://localhost:5000/Transactions", {
+          fetch("https://tech-cart-two.vercel.app/Transactions", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -121,7 +124,7 @@ console.log(formattedDate);
 
   const deleteCart = async () => {
     try {
-      const response = await fetch(`https://tech-cart-vert.vercel.app/deleteCart/${cartNumber}`, {
+      const response = await fetch(`https://tech-cart-two.vercel.app/deleteCart/${cartNumber}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +151,7 @@ console.log(formattedDate);
   
     const fetchData = async () => {
       try {
-        const response = await fetch("https://tech-cart-vert.vercel.app/TempItems", {
+        const response = await fetch("https://tech-cart-two.vercel.app/TempItems", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -189,7 +192,7 @@ console.log(formattedDate);
 
  const paymentHandler=async (e)=>{
   console.log("payment start")
-        const response = await fetch("http://localhost:5000/order",{
+        const response = await fetch("https://tech-cart-two.vercel.app/order",{
              method:"POST",
              body:JSON.stringify({
               amount,
@@ -213,7 +216,7 @@ console.log(formattedDate);
           "order_id": order.id, 
           "handler":async function  (response){
              const body={...response};
-             const validateRes=await fetch("http://localhost:5000/validate",{
+             const validateRes=await fetch("https://tech-cart-two.vercel.app/validate",{
               method:"POST",
               body:JSON.stringify(body),
               headers:{

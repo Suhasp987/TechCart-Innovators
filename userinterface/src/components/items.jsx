@@ -12,7 +12,7 @@ const Items = () => {
       .then(response => {
         console.log('Items retrieved successfully:', response.totalUsers);
        
-         setData(reponse.data);
+         setData(response.data);
          
       })
       .catch(error => {

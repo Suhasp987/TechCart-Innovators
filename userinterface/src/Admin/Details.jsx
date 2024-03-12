@@ -10,7 +10,7 @@ const Details = () => {
     const fetchData = async () => {
       try {
         // Fetch data from the Transaction API using orderId in the request body
-        const response = await fetch('https://tech-cart-vert.vercel.app/OrderId', {
+        const response = await fetch('https://tech-cart-two.vercel.app/OrderId', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

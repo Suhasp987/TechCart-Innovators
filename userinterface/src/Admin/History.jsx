@@ -26,6 +26,7 @@ const History = () => {
     phone: '',
     name: '',
     orderId: '',
+    Payment:'',
   });
 
   useEffect(() => {
@@ -186,6 +187,7 @@ const History = () => {
                 )}
               </th>
               <th>Amount</th>
+              <th>Payment</th>
               
             </tr>
           </thead>
@@ -200,6 +202,7 @@ const History = () => {
                 <td>{item.Email}</td>
                 <td><Link to={`/details/${item.OrderId}`}>{item.OrderId}</Link></td>
                 <td>{item.Amount}</td>
+                <td>{item.Payment}</td>
               </tr>
             ))
           ) : (
