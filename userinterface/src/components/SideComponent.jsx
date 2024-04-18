@@ -3,7 +3,7 @@ import { useParams, useSearchParams ,useNavigate} from 'react-router-dom';
 
 import { Stack } from '@mui/material';
 import { Categories } from './utils/constant';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const SideComponent = ({ selectedCategory, setSelectedCategory,state }) => {
   const [name, setName] = useState('');
