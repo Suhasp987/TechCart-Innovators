@@ -6,8 +6,8 @@
 
 
 export const Categories=[
-         {name:"Home",  icon:Home,},
+         {name:"Home",  icon:"Home",},
          {name:"Cart" ,icon:"Hello",},
-         {name:'Account',icon:Account,}
+         {name:'Account',icon:"Account",}
          
 ]
