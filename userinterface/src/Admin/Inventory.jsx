@@ -12,7 +12,7 @@ const Inventory = () => {
     const fetchData = async () => {
       try {
        
-        const response = await axios.get('https://tech-cart-two.vercel.app/Inventoryitem');
+        const response = await axios.get('https://tech-cart-innovators-1l8u.vercel.app/Inventoryitem');
         console.log('API Response:', response.data);
         setInventoryItems(response.data);
       } catch (error) {

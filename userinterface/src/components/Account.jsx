@@ -41,12 +41,12 @@ const Account = () => {
     <div className="account-container mx-auto max-w-2xl p-4">
       <h2 className="text-2xl font-bold text-center mb-8">Your Account Info</h2>
 
-      <form className="user-details-form" onSubmit={handleSubmit}>
+      <form className="user-details-form " onSubmit={handleSubmit}>
         <table className="user-details-table ">
           <tbody>
           <tr className='ml-8'>
           <td className="label">Name</td>
-          <td>
+          <td className='ml-12'>
             <TextField
               disabled={!editMode}
               id="outlined-disabled"
@@ -103,8 +103,8 @@ const Account = () => {
         </table>
 
         {editMode && (
-          <Button className="save-button mt-4 m-[25px]" variant="contained" type="submit">
-            Save Changes
+          <Button className="save-button mt-32 ml-48 " variant="contained" type="submit">
+            Save 
           </Button>
         )}
 

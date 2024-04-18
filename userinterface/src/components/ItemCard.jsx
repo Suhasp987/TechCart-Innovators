@@ -70,7 +70,7 @@ console.log(formattedDate);
           Payment:result.msg,
         };
   
-        fetch("http://localhost:5000/histories", {
+        fetch("https://tech-cart-innovators-1l8u.vercel.app/histories", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -97,7 +97,7 @@ console.log(formattedDate);
             
           };
     
-          fetch("https://tech-cart-two.vercel.app/Transactions", {
+          fetch("https://tech-cart-innovators-1l8u.vercel.app/Transactions", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -124,7 +124,7 @@ console.log(formattedDate);
 
   const deleteCart = async () => {
     try {
-      const response = await fetch(`https://tech-cart-two.vercel.app/deleteCart/${cartNumber}`, {
+      const response = await fetch(`https://tech-cart-innovators-1l8u.vercel.app/deleteCart/${cartNumber}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -151,7 +151,7 @@ console.log(formattedDate);
   
     const fetchData = async () => {
       try {
-        const response = await fetch("https://tech-cart-two.vercel.app/TempItems", {
+        const response = await fetch("https://tech-cart-innovators-1l8u.vercel.app/TempItems", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -192,7 +192,7 @@ console.log(formattedDate);
 
  const paymentHandler=async (e)=>{
   console.log("payment start")
-        const response = await fetch("https://tech-cart-two.vercel.app/order",{
+        const response = await fetch("https://tech-cart-innovators-1l8u.vercel.app/order",{
              method:"POST",
              body:JSON.stringify({
               amount,
@@ -216,7 +216,7 @@ console.log(formattedDate);
           "order_id": order.id, 
           "handler":async function  (response){
              const body={...response};
-             const validateRes=await fetch("https://tech-cart-two.vercel.app/validate",{
+             const validateRes=await fetch("https://tech-cart-innovators-1l8u.vercel.app/validate",{
               method:"POST",
               body:JSON.stringify(body),
               headers:{
@@ -309,8 +309,8 @@ console.log(formattedDate);
         onClose={handleCloseSnackbar}
         message={`Pament Sucessfull ${result.msg}`}
       />
-        {cartItems.length>0 && <h3 style={{display:'flex',  justifyContent:'flex-end',marginRight:'18rem'}}  className="m-5 text-lg">Total : {total}</h3>} 
-        <div style={{display:'flex',justifyContent:'flex-end',marginRight:'17rem'}}>
+        {cartItems.length>0 && <h3 style={{display:'flex',  justifyContent:'flex-end',marginRight:'6rem'}}  className="m-5 ml-48 text-lg w-auto">Total:{total}</h3>} 
+        <div style={{display:'flex',justifyContent:'flex-end',marginRight:'5rem'}}>
         
         {cartItems.length>0 &&<Button variant="contained" onClick={paymentHandler}>Payment</Button>}
        

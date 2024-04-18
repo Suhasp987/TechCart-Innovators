@@ -28,7 +28,7 @@ const Sidebar = ({selectedCategory,setSelectedCategory}) => {
     ]
   return (
     <div className="flex md:flex-row flex-col h-full">
-    <Stack  direction="row" sx={{ overflow: 'auto', height: { sx: 'auto', md: '95%' }, flexDirection:{sx:'row',md:'column'} }} >
+    <Stack  direction="row" sx={{ overflow: 'auto', height: { sx: 'auto', md: '95%' }, flexDirection:{sx:'row',md:'column'} }} className='ml-5'>
       {items && items.map(category => (
         
         <button className='category-btn' style={{background:category.name===params.text && '#fc1503',color:'white'}} key={category.name}  onClick={() => handleCategoryClick(category.name)}>

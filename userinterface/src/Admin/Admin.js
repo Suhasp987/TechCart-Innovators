@@ -19,7 +19,7 @@ const Admin = () => {
         
       </div>
       
-      <Footer/>
+     
     </div>
   )
 }
