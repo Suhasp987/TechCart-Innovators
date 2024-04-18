@@ -1,11 +1,11 @@
 const nodeExternals = require('webpack-node-externals');
 
+const path = require('path');
+
 module.exports = {
-  // Your Webpack configuration goes here
-  externals: [
-    nodeExternals({
-      // Allowlist specific modules that should be bundled
-      allowlist: ['crypto']
-    })
-  ]
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify')
+    }
+  }
 };
