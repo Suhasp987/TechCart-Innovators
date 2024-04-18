@@ -1,4 +1,4 @@
-const nodeExternals = require('webpack-node-externals');
+// webpack.config.js
 
 const path = require('path');
 
