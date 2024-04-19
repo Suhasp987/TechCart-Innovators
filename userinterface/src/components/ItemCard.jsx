@@ -190,72 +190,72 @@ console.log(formattedDate);
   const currency="INR";
   const receiptId="qryaq1";
 
- const paymentHandler=async (e)=>{
-  console.log("payment start")
-        const response = await fetch("https://tech-cart-innovators-1l8u.vercel.app/order",{
-             method:"POST",
-             body:JSON.stringify({
-              amount,
-              currency,
-             receipt: receiptId
-             }),
-             headers:{
-              "COntent-Type":"application/json",
-             },
-        });
-        const order=await response.json();
-        console.log("order",order);
-        console.log(order.id);
-        var options = {
-          "key": "rzp_test_L1JPeGnZbS2ffv", 
-          amount,
-          currency,
-          "name": "Tech Cart ", 
-          "description": "Test Transaction",
-          "image": "",
-          "order_id": order.id, 
-          "handler":async function  (response){
-             const body={...response};
-             const validateRes=await fetch("https://tech-cart-innovators-1l8u.vercel.app/validate",{
-              method:"POST",
-              body:JSON.stringify(body),
-              headers:{
-                "Content-Type":"application/json"
-              },
-             });
-             const jsonRes=await validateRes.json();
-             setResult(jsonRes)
+//  const paymentHandler=async (e)=>{
+//   console.log("payment start")
+//         const response = await fetch("https://tech-cart-innovators-1l8u.vercel.app/order",{
+//              method:"POST",
+//              body:JSON.stringify({
+//               amount,
+//               currency,
+//              receipt: receiptId
+//              }),
+//              headers:{
+//               "COntent-Type":"application/json",
+//              },
+//         });
+//         const order=await response.json();
+//         console.log("order",order);
+//         console.log(order.id);
+//         var options = {
+//           "key": "rzp_test_L1JPeGnZbS2ffv", 
+//           amount,
+//           currency,
+//           "name": "Tech Cart ", 
+//           "description": "Test Transaction",
+//           "image": "",
+//           "order_id": order.id, 
+//           "handler":async function  (response){
+//              const body={...response};
+//              const validateRes=await fetch("https://tech-cart-innovators-1l8u.vercel.app/validate",{
+//               method:"POST",
+//               body:JSON.stringify(body),
+//               headers:{
+//                 "Content-Type":"application/json"
+//               },
+//              });
+//              const jsonRes=await validateRes.json();
+//              setResult(jsonRes)
 
-             console.log(jsonRes);
-          },
-          "prefill": { 
-              "name": "Suhas", 
-              "email": "suhas123.p@gmail.com", 
-              "contact": "8792713154"   
-          },
-          "notes": {
-              "address": "Razorpay Corporate Office"
-          },
-          "theme": {
-              "color": "#3399cc"
-          }
-      };
-      var rzp1 = new Razorpay(options);
-      rzp1.on('payment.failed', function (response){
-              // alert(response.error.code);
-              // alert(response.error.description);
-              // alert(response.error.source);
-              // alert(response.error.step);
-              // alert(response.error.reason);
-              // alert(response.error.metadata.order_id);
-              // alert(response.error.metadata.payment_id);
-      });
+//              console.log(jsonRes);
+//           },
+//           "prefill": { 
+//               "name": "Suhas", 
+//               "email": "suhas123.p@gmail.com", 
+//               "contact": "8792713154"   
+//           },
+//           "notes": {
+//               "address": "Razorpay Corporate Office"
+//           },
+//           "theme": {
+//               "color": "#3399cc"
+//           }
+//       };
+//       var rzp1 = new Razorpay(options);
+//       rzp1.on('payment.failed', function (response){
+//               // alert(response.error.code);
+//               // alert(response.error.description);
+//               // alert(response.error.source);
+//               // alert(response.error.step);
+//               // alert(response.error.reason);
+//               // alert(response.error.metadata.order_id);
+//               // alert(response.error.metadata.payment_id);
+//       });
 
-      rzp1.open();
-      e.preventDefault();
+//       rzp1.open();
+//       e.preventDefault();
 
 
- }
+//  }
  
  
  const handleEnterKey = (e) => {
